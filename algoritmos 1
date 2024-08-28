@@ -1,0 +1,146 @@
+/******************************************************************************
+
+Projeto: Sistema de Gerenciamento de Corridas
+
+Autores: 
+    Ilanna Karolyna Da Cunha Piaui Corado
+    Matheus Henrique Furtado
+    Pedro Henrique Paludetto
+
+
+*******************************************************************************/
+#include <stdio.h>
+#include <string.h>
+
+#define TAMNOME 50
+#define TAMPAIS 35
+
+//Variaveis
+int validacaoNome = 1;
+int validacaoPais = 0;
+int validacaoData = 1;
+int resultadoBissexto = 0;
+
+/*
+    Valores:
+    0 - Inválido
+    1 - Válido 
+*/
+
+//Struct DATA
+
+typedef struct data{
+    int dia;
+    int mes;
+    int ano;
+} Data;
+
+//Struct Atleta
+
+typedef struct atleta{
+    char nome[TAMNOME];
+    char pais[TAMPAIS];
+    char sexo;
+    Data nascimento;
+} Atleta;
+
+//Struct treinamento
+
+typedef struct treinamento{
+    Atleta atleta;
+    int tempo[7];
+} Treinamento;
+
+//-----Funções-----
+
+
+//Remove o último caracter da string, caracter indesejado
+void removerLinha(char* str){
+    int size = strlen(str);
+    
+    if(str[size - 1] == '\n'){
+        str[size - 1] = '\0';
+    }
+}
+
+int validarNome(char* nome){
+    int tamanhoNome = strlen(nome);
+    removerLinha(nome);
+    
+    if(tamanhoNome <= 2){
+        validacaoNome = 0;
+    }else if(nome[0] == ' '){
+        validacaoNome = 0;
+    }else{
+        for(int i = 0; i < tamanhoNome; i++){
+            if(nome[i] >= '0' && nome[i] <= '9'){
+                validacaoNome = 0;
+                break;
+            }
+        }
+    }
+    
+    return validacaoNome;
+}
+
+int validarPais(char* str){
+    int tamanhoPais = strlen(str);
+    removerLinha(str);
+    
+    if(tamanhoPais <= 2){
+        validacaoPais = 0;
+    }else if(str[0] == ' '){
+        validacaoPais = 0;
+    }else if(strcmp(str, "Brasil") == 0 || strcmp(str, "EUA") == 0 || strcmp(str, "Estados Unidos") == 0
+            || strcmp(str, "Inglaterra") == 0 || strcmp(str, "Arabia Saudita") == 0){
+        validacaoPais = 1;
+    }else{
+        for(int i = 0; i < tamanhoPais; i++){
+            if(str[i] >= '0' && str[i] <= '9'){
+                validacaoPais = 0;
+                break;
+            }
+        }
+    }
+    
+    return validacaoPais;
+}
+
+int bissexto(int ano){
+    if(ano % 4 == 0){
+        //é bissexto
+        resultadoBissexto = 366;
+    }else{
+        resultadoBissexto = 365;
+    }
+    
+    return resultadoBissexto;
+}
+
+int validarData(Data data){
+    if((data.dia > 31 || data.dia < 1) || (data.mes < 1 || data.mes > 12) || (data.ano < 1900 || data.ano > 2024)){
+        validacaoData = 0;
+    }else{
+        if((data.mes == 4 || data.mes == 6 || data.mes == 9 || data.mes == 11) && data.dia == 31){
+            validacaoData = 0;
+        }else if(data.mes == 2){
+            if(data.dia > 29){
+                validacaoData = 0;
+            }else{
+                bissexto(data.ano);
+            
+                if(resultadoBissexto == 365 && data.dia == 29){
+                    validacaoData = 0;
+                }
+            }
+        } 
+    }
+    
+    return validacaoData;
+}
+
+int main(){
+    
+
+    return 0;
+}
